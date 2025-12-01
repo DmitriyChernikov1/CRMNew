@@ -1,0 +1,17 @@
+calendarTest.class
+PriorityTaskApiTest.class
+ProprietorListApiTest.class
+regulationTest.class
+administration.class
+authTest.class
+statusTasksTest.class
+tasksTest.class
+tableSettingTest.class
+tasksTest$1.class
+TestDataJson.class
+authTokenTest.class
+TimeGenerated.class
+groupOfResponsibleTest.class
+resrvationTest.class
+contactsTest.class
+BaseTest.class
