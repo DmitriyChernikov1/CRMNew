@@ -1,12 +1,12 @@
 {
     "createdBy": "Черников Дмитрий Витальевич",
-    "createdDate": "2025-12-01 10:18:58.398",
+    "createdDate": "2025-12-01 10:44:23.833",
     "lastModifiedBy": "Черников Дмитрий Витальевич",
-    "lastModifiedDate": "2025-12-01 10:18:58.398",
+    "lastModifiedDate": "2025-12-01 10:44:23.833",
     "deletedDate": null,
     "deletedBy": null,
     "isDelete": null,
-    "id": "29aa99d3-810c-4b02-8336-30da5192fc76",
+    "id": "0e85c7e0-c94c-484a-b910-90fac979419b",
     "name": "Контакт имя",
     "typeClient": "ЮЛ",
     "typeContact": {
@@ -89,13 +89,13 @@
 
 {
     "createdBy": "Черников Дмитрий Витальевич",
-    "createdDate": "2025-12-01 10:18:59.064",
+    "createdDate": "2025-12-01 10:44:24.234",
     "lastModifiedBy": "Черников Дмитрий Витальевич",
-    "lastModifiedDate": "2025-12-01 10:18:59.064",
+    "lastModifiedDate": "2025-12-01 10:44:24.234",
     "deletedDate": null,
     "deletedBy": null,
     "isDelete": null,
-    "id": "2ccf1f93-e7fc-4727-9eda-a6d6f6deeb5d",
+    "id": "db66ef8d-90e3-46f6-bc27-832e791fa097",
     "name": "Контакт имя",
     "typeClient": "ФЛ",
     "typeContact": {

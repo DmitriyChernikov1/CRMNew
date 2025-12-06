@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="resrvationTest" time="2.419" tests="7" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="resrvationTest" time="1.812" tests="7" errors="0" skipped="0" failures="2">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="user.country" value="RU"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-17\bin"/>
-    <property name="sun.java.command" value="C:\Users\User\AppData\Local\Temp\surefire8588290624545864145\surefirebooter873180327405513488.jar C:\Users\User\AppData\Local\Temp\surefire8588290624545864145 2025-12-01T10-18-42_747-jvmRun1 surefire16816721548104881909tmp surefire_04019532848466438016tmp"/>
+    <property name="sun.java.command" value="C:\Users\User\AppData\Local\Temp\surefire4857337474771461567\surefirebooter16020194624102061129.jar C:\Users\User\AppData\Local\Temp\surefire4857337474771461567 2025-12-01T10-44-09_678-jvmRun1 surefire7860518370703606152tmp surefire_074089303941350247tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\User\CRMNew\target\test-classes;C:\Users\User\CRMNew\target\classes;C:\Users\User\.m2\repository\org\java-websocket\Java-WebSocket\1.5.3\Java-WebSocket-1.5.3.jar;C:\Users\User\.m2\repository\org\slf4j\slf4j-api\1.7.25\slf4j-api-1.7.25.jar;C:\Users\User\.m2\repository\org\junit\jupiter\junit-jupiter\5.8.1\junit-jupiter-5.8.1.jar;C:\Users\User\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.8.1\junit-jupiter-api-5.8.1.jar;C:\Users\User\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\User\.m2\repository\org\junit\platform\junit-platform-commons\1.8.1\junit-platform-commons-1.8.1.jar;C:\Users\User\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\User\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.8.1\junit-jupiter-params-5.8.1.jar;C:\Users\User\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.8.1\junit-jupiter-engine-5.8.1.jar;C:\Users\User\.m2\repository\org\junit\platform\junit-platform-engine\1.8.1\junit-platform-engine-1.8.1.jar;C:\Users\User\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.12.5\jackson-databind-2.12.5.jar;C:\Users\User\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.12.5\jackson-annotations-2.12.5.jar;C:\Users\User\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.12.5\jackson-core-2.12.5.jar;C:\Users\User\.m2\repository\io\rest-assured\rest-assured\5.1.1\rest-assured-5.1.1.jar;C:\Users\User\.m2\repository\org\apache\groovy\groovy\4.0.1\groovy-4.0.1.jar;C:\Users\User\.m2\repository\org\apache\groovy\groovy-xml\4.0.1\groovy-xml-4.0.1.jar;C:\Users\User\.m2\repository\org\apache\httpcomponents\httpclient\4.5.13\httpclient-4.5.13.jar;C:\Users\User\.m2\repository\org\apache\httpcomponents\httpcore\4.4.13\httpcore-4.4.13.jar;C:\Users\User\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\User\.m2\repository\commons-codec\commons-codec\1.11\commons-codec-1.11.jar;C:\Users\User\.m2\repository\org\apache\httpcomponents\httpmime\4.5.13\httpmime-4.5.13.jar;C:\Users\User\.m2\repository\org\hamcrest\hamcrest\2.1\hamcrest-2.1.jar;C:\Users\User\.m2\repository\org\ccil\cowan\tagsoup\tagsoup\1.2.1\tagsoup-1.2.1.jar;C:\Users\User\.m2\repository\io\rest-assured\json-path\5.1.1\json-path-5.1.1.jar;C:\Users\User\.m2\repository\org\apache\groovy\groovy-json\4.0.1\groovy-json-4.0.1.jar;C:\Users\User\.m2\repository\io\rest-assured\rest-assured-common\5.1.1\rest-assured-common-5.1.1.jar;C:\Users\User\.m2\repository\io\rest-assured\xml-path\5.1.1\xml-path-5.1.1.jar;C:\Users\User\.m2\repository\org\apache\commons\commons-lang3\3.11\commons-lang3-3.11.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-junit5\2.13.0\allure-junit5-2.13.0.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-junit-platform\2.13.0\allure-junit-platform-2.13.0.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-java-commons\2.13.0\allure-java-commons-2.13.0.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-model\2.13.0\allure-model-2.13.0.jar;C:\Users\User\.m2\repository\org\apache\tika\tika-core\1.20\tika-core-1.20.jar;C:\Users\User\.m2\repository\org\jooq\joor-java-8\0.9.10\joor-java-8-0.9.10.jar;C:\Users\User\.m2\repository\org\junit\platform\junit-platform-launcher\1.4.0\junit-platform-launcher-1.4.0.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-rest-assured\2.19.0\allure-rest-assured-2.19.0.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-attachments\2.19.0\allure-attachments-2.19.0.jar;C:\Users\User\.m2\repository\org\freemarker\freemarker\2.3.31\freemarker-2.3.31.jar;C:\Users\User\.m2\repository\org\assertj\assertj-core\3.24.2\assertj-core-3.24.2.jar;C:\Users\User\.m2\repository\net\bytebuddy\byte-buddy\1.12.21\byte-buddy-1.12.21.jar;C:\Users\User\.m2\repository\org\json\json\20250517\json-20250517.jar;C:\Users\User\.m2\repository\org\slf4j\slf4j-simple\2.0.13\slf4j-simple-2.0.13.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\User\AppData\Local\Temp\surefire8588290624545864145\surefirebooter873180327405513488.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\User\AppData\Local\Temp\surefire4857337474771461567\surefirebooter16020194624102061129.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.12+8-LTS-286"/>
@@ -58,11 +58,97 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="resrvationed" classname="resrvationTest" time="0.799"/>
-  <testcase name="resrvationFord" classname="resrvationTest" time="0.185"/>
-  <testcase name="resrvationVats" classname="resrvationTest" time="0.322"/>
-  <testcase name="GetReservationFord" classname="resrvationTest" time="0.076"/>
+  <testcase name="resrvationed" classname="resrvationTest" time="0.303"/>
+  <testcase name="resrvationFord" classname="resrvationTest" time="0.144">
+    <failure message="expected: &lt;201&gt; but was: &lt;400&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: expected: <201> but was: <400>
+	at resrvationTest.resrvationFord(resrvationTest.java:134)
+]]></failure>
+    <system-out><![CDATA[Request method:	POST
+Request URI:	http://172.20.207.16/api/client-relations/tasks-full/booking-rented-car-ford
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEQ2hlcm5pa292QHNiZXJjaXR5LnJ1IiwiZXhwIjoxNzY0NjYxNDc1LCJyb2xlcyI6eyJpZCI6ImNjZWQ0NTg1LWUzNTgtNDBiZi04NjE0LTAxYjBiZDM5NDM5YiIsIm5hbWUiOiLQkNC00LzQuNC90LjRgdGC0YDQsNGC0L7RgCIsImdyb3VwQWNjZXNzZXMiOlt7ImlkIjoiMTQwYTAyMTAtZDFkMS00MzllLWIzYTQtMGVlNWJlNmQyOWQyIiwibmFtZSI6ItCQ0LTQvNC40L3QuNGB0YLRgNCw0YLQvtGAIC0g0L_QvtC70L3Ri9C5INC00L7RgdGC0YPQvyJ9XX0sImZpcnN0TmFtZSI6ItCn0LXRgNC90LjQutC-0LIg0JTQvNC40YLRgNC40Lkg0JLQuNGC0LDQu9GM0LXQstC40YciLCJpZCI6IjAxYmI2NmNjLTY0NTYtNDFjZS05ZmI3LWFkMzhjMjVmZWE0MyIsImVtcGxveWVlSWQiOiJiNjlmMGFmMC00M2JkLTRhMzctYjNjMS1mNjhjMTIzZmRlMGMiLCJpc0NvbnRyYWN0b3IiOmZhbHNlLCJzZXNzaW9uSWQiOiI4MTg5NGMwNC1kMTlmLTRmMDktODIwOC0yYmY0NmUxOTRlOWUifQ.J1xzJa4Xtn_sSdOhfUKkxqie-hGqFZdr836hWn5NDuERNKy2_K2q7HlA7R40OX3nSl4s3BL0NkuM5JXhAdqWEw
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:
+{
+    "destination": "Автотест",
+    "startDate": "2025-12-01 11:00:35.575",
+    "endDate": "2025-12-01 11:30:35.575",
+    "objectUkId": "b71a6e71-da3a-46e7-a86f-0e0f0f8ccf67"
+}
+HTTP/1.1 400 Bad Request
+Server: nginx
+Date: Mon, 01 Dec 2025 07:44:35 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+
+{
+    "type": "CommonException",
+    "message": "At this time, all cars are booked",
+    "messages": null,
+    "detail": null
+}
+]]></system-out>
+  </testcase>
+  <testcase name="resrvationVats" classname="resrvationTest" time="0.185">
+    <failure message="expected: &lt;201&gt; but was: &lt;400&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: expected: <201> but was: <400>
+	at resrvationTest.resrvationVats(resrvationTest.java:200)
+]]></failure>
+    <system-out><![CDATA[Request method:	POST
+Request URI:	http://172.20.207.16/api/client-relations/tasks-full/booking-rented-car-hav
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJEQ2hlcm5pa292QHNiZXJjaXR5LnJ1IiwiZXhwIjoxNzY0NjYxNDc1LCJyb2xlcyI6eyJpZCI6ImNjZWQ0NTg1LWUzNTgtNDBiZi04NjE0LTAxYjBiZDM5NDM5YiIsIm5hbWUiOiLQkNC00LzQuNC90LjRgdGC0YDQsNGC0L7RgCIsImdyb3VwQWNjZXNzZXMiOlt7ImlkIjoiMTQwYTAyMTAtZDFkMS00MzllLWIzYTQtMGVlNWJlNmQyOWQyIiwibmFtZSI6ItCQ0LTQvNC40L3QuNGB0YLRgNCw0YLQvtGAIC0g0L_QvtC70L3Ri9C5INC00L7RgdGC0YPQvyJ9XX0sImZpcnN0TmFtZSI6ItCn0LXRgNC90LjQutC-0LIg0JTQvNC40YLRgNC40Lkg0JLQuNGC0LDQu9GM0LXQstC40YciLCJpZCI6IjAxYmI2NmNjLTY0NTYtNDFjZS05ZmI3LWFkMzhjMjVmZWE0MyIsImVtcGxveWVlSWQiOiJiNjlmMGFmMC00M2JkLTRhMzctYjNjMS1mNjhjMTIzZmRlMGMiLCJpc0NvbnRyYWN0b3IiOmZhbHNlLCJzZXNzaW9uSWQiOiJkM2UwYTk0OS1iZDhhLTQ3MmYtYmNmNy0yZGFlNTk2M2E3MTMifQ.27dxvIFhoLgCbp4YIkeJSGj4lTrwFXtmODp59UMztA7QIFU0Yn4CzNvMW3_9xo8hFOMO_bdJ4w1c0R0VsWOELQ
+				Accept=*/*
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:
+{
+    "destination": "Автотест",
+    "startDate": "2025-12-01 11:00:35.907",
+    "endDate": "2025-12-01 11:30:35.907",
+    "objectUkId": "f239537b-c3bf-4ded-8b10-ef1dc8ff55ac"
+}
+HTTP/1.1 400 Bad Request
+Server: nginx
+Date: Mon, 01 Dec 2025 07:44:35 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+
+{
+    "type": "CommonException",
+    "message": "At this time, all cars are booked",
+    "messages": null,
+    "detail": null
+}
+]]></system-out>
+  </testcase>
+  <testcase name="GetReservationFord" classname="resrvationTest" time="0.086"/>
   <testcase name="GetReservationNiva" classname="resrvationTest" time="0.001"/>
-  <testcase name="GetReservationVats" classname="resrvationTest" time="0.168"/>
-  <testcase name="GetReservation" classname="resrvationTest" time="0.161"/>
+  <testcase name="GetReservationVats" classname="resrvationTest" time="0.182"/>
+  <testcase name="GetReservation" classname="resrvationTest" time="0.181"/>
 </testsuite>

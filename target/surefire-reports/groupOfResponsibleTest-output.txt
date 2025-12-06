@@ -1,14 +1,14 @@
 {
     "createdBy": "Черников Дмитрий Витальевич",
-    "createdDate": "2025-12-01 10:18:59.682",
+    "createdDate": "2025-12-01 10:44:24.792",
     "lastModifiedBy": "Черников Дмитрий Витальевич",
-    "lastModifiedDate": "2025-12-01 10:18:59.682",
+    "lastModifiedDate": "2025-12-01 10:44:24.792",
     "deletedDate": null,
     "deletedBy": null,
     "isDelete": null,
-    "id": "184044ee-bd99-4ebe-9491-bea037ec617b",
-    "name": "автотест 1764573539563",
-    "number": 68,
+    "id": "ec965e58-b986-4c5e-9687-6d53aae4d381",
+    "name": "автотест 1764575064718",
+    "number": 69,
     "shortName": null,
     "isDispatcher": null
 }

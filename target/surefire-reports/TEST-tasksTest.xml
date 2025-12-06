@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="tasksTest" time="25.659" tests="14" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="tasksTest" time="25.542" tests="14" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="user.country" value="RU"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-17\bin"/>
-    <property name="sun.java.command" value="C:\Users\User\AppData\Local\Temp\surefire8588290624545864145\surefirebooter873180327405513488.jar C:\Users\User\AppData\Local\Temp\surefire8588290624545864145 2025-12-01T10-18-42_747-jvmRun1 surefire16816721548104881909tmp surefire_04019532848466438016tmp"/>
+    <property name="sun.java.command" value="C:\Users\User\AppData\Local\Temp\surefire4857337474771461567\surefirebooter16020194624102061129.jar C:\Users\User\AppData\Local\Temp\surefire4857337474771461567 2025-12-01T10-44-09_678-jvmRun1 surefire7860518370703606152tmp surefire_074089303941350247tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\User\CRMNew\target\test-classes;C:\Users\User\CRMNew\target\classes;C:\Users\User\.m2\repository\org\java-websocket\Java-WebSocket\1.5.3\Java-WebSocket-1.5.3.jar;C:\Users\User\.m2\repository\org\slf4j\slf4j-api\1.7.25\slf4j-api-1.7.25.jar;C:\Users\User\.m2\repository\org\junit\jupiter\junit-jupiter\5.8.1\junit-jupiter-5.8.1.jar;C:\Users\User\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.8.1\junit-jupiter-api-5.8.1.jar;C:\Users\User\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\User\.m2\repository\org\junit\platform\junit-platform-commons\1.8.1\junit-platform-commons-1.8.1.jar;C:\Users\User\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\User\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.8.1\junit-jupiter-params-5.8.1.jar;C:\Users\User\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.8.1\junit-jupiter-engine-5.8.1.jar;C:\Users\User\.m2\repository\org\junit\platform\junit-platform-engine\1.8.1\junit-platform-engine-1.8.1.jar;C:\Users\User\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.12.5\jackson-databind-2.12.5.jar;C:\Users\User\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.12.5\jackson-annotations-2.12.5.jar;C:\Users\User\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.12.5\jackson-core-2.12.5.jar;C:\Users\User\.m2\repository\io\rest-assured\rest-assured\5.1.1\rest-assured-5.1.1.jar;C:\Users\User\.m2\repository\org\apache\groovy\groovy\4.0.1\groovy-4.0.1.jar;C:\Users\User\.m2\repository\org\apache\groovy\groovy-xml\4.0.1\groovy-xml-4.0.1.jar;C:\Users\User\.m2\repository\org\apache\httpcomponents\httpclient\4.5.13\httpclient-4.5.13.jar;C:\Users\User\.m2\repository\org\apache\httpcomponents\httpcore\4.4.13\httpcore-4.4.13.jar;C:\Users\User\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\User\.m2\repository\commons-codec\commons-codec\1.11\commons-codec-1.11.jar;C:\Users\User\.m2\repository\org\apache\httpcomponents\httpmime\4.5.13\httpmime-4.5.13.jar;C:\Users\User\.m2\repository\org\hamcrest\hamcrest\2.1\hamcrest-2.1.jar;C:\Users\User\.m2\repository\org\ccil\cowan\tagsoup\tagsoup\1.2.1\tagsoup-1.2.1.jar;C:\Users\User\.m2\repository\io\rest-assured\json-path\5.1.1\json-path-5.1.1.jar;C:\Users\User\.m2\repository\org\apache\groovy\groovy-json\4.0.1\groovy-json-4.0.1.jar;C:\Users\User\.m2\repository\io\rest-assured\rest-assured-common\5.1.1\rest-assured-common-5.1.1.jar;C:\Users\User\.m2\repository\io\rest-assured\xml-path\5.1.1\xml-path-5.1.1.jar;C:\Users\User\.m2\repository\org\apache\commons\commons-lang3\3.11\commons-lang3-3.11.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-junit5\2.13.0\allure-junit5-2.13.0.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-junit-platform\2.13.0\allure-junit-platform-2.13.0.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-java-commons\2.13.0\allure-java-commons-2.13.0.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-model\2.13.0\allure-model-2.13.0.jar;C:\Users\User\.m2\repository\org\apache\tika\tika-core\1.20\tika-core-1.20.jar;C:\Users\User\.m2\repository\org\jooq\joor-java-8\0.9.10\joor-java-8-0.9.10.jar;C:\Users\User\.m2\repository\org\junit\platform\junit-platform-launcher\1.4.0\junit-platform-launcher-1.4.0.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-rest-assured\2.19.0\allure-rest-assured-2.19.0.jar;C:\Users\User\.m2\repository\io\qameta\allure\allure-attachments\2.19.0\allure-attachments-2.19.0.jar;C:\Users\User\.m2\repository\org\freemarker\freemarker\2.3.31\freemarker-2.3.31.jar;C:\Users\User\.m2\repository\org\assertj\assertj-core\3.24.2\assertj-core-3.24.2.jar;C:\Users\User\.m2\repository\net\bytebuddy\byte-buddy\1.12.21\byte-buddy-1.12.21.jar;C:\Users\User\.m2\repository\org\json\json\20250517\json-20250517.jar;C:\Users\User\.m2\repository\org\slf4j\slf4j-simple\2.0.13\slf4j-simple-2.0.13.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\User\AppData\Local\Temp\surefire8588290624545864145\surefirebooter873180327405513488.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\User\AppData\Local\Temp\surefire4857337474771461567\surefirebooter16020194624102061129.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.12+8-LTS-286"/>
@@ -58,18 +58,18 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="getInfoTask" classname="tasksTest" time="0.221"/>
-  <testcase name="createApplication" classname="tasksTest" time="2.52"/>
-  <testcase name="editApplication" classname="tasksTest" time="2.511"/>
-  <testcase name="getInfoGroupAplication" classname="tasksTest" time="0.167"/>
-  <testcase name="sendMessageInterior" classname="tasksTest" time="0.398"/>
-  <testcase name="testMessageInWebSocketChat" classname="tasksTest" time="0.585"/>
-  <testcase name="getInfoApplication" classname="tasksTest" time="0.176"/>
-  <testcase name="createAndDeleteTask" classname="tasksTest" time="2.994"/>
-  <testcase name="createTaskPaid" classname="tasksTest" time="2.575"/>
-  <testcase name="createTaskEmergency" classname="tasksTest" time="2.815"/>
-  <testcase name="createTaskWithApplication" classname="tasksTest" time="2.817"/>
-  <testcase name="createAndDeleteApplication" classname="tasksTest" time="2.676"/>
-  <testcase name="createTask" classname="tasksTest" time="2.588"/>
-  <testcase name="editTask" classname="tasksTest" time="2.602"/>
+  <testcase name="getInfoTask" classname="tasksTest" time="0.21"/>
+  <testcase name="createApplication" classname="tasksTest" time="2.464"/>
+  <testcase name="editApplication" classname="tasksTest" time="2.491"/>
+  <testcase name="getInfoGroupAplication" classname="tasksTest" time="0.164"/>
+  <testcase name="sendMessageInterior" classname="tasksTest" time="0.262"/>
+  <testcase name="testMessageInWebSocketChat" classname="tasksTest" time="0.599"/>
+  <testcase name="getInfoApplication" classname="tasksTest" time="0.139"/>
+  <testcase name="createAndDeleteTask" classname="tasksTest" time="3.902"/>
+  <testcase name="createTaskPaid" classname="tasksTest" time="2.45"/>
+  <testcase name="createTaskEmergency" classname="tasksTest" time="2.536"/>
+  <testcase name="createTaskWithApplication" classname="tasksTest" time="2.561"/>
+  <testcase name="createAndDeleteApplication" classname="tasksTest" time="2.612"/>
+  <testcase name="createTask" classname="tasksTest" time="2.553"/>
+  <testcase name="editTask" classname="tasksTest" time="2.583"/>
 </testsuite>
