@@ -3,14 +3,15 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 
 import java.sql.Time;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@ExtendWith(BaseTest.class)
 public class groupOfResponsibleTest {
-    String validUuid = "d9bd85fc-b97e-41d8-a6a5-b0e32b61e77f";
+    String validUuid = "3909df72-e6ee-49fa-a117-793b6b4789cc";
     authTokenTest authService = new authTokenTest();
     String accessToken = authService.getAccessToken();
     String time = "автотест " + System.currentTimeMillis();

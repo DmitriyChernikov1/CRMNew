@@ -4,15 +4,29 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
-
+@ExtendWith(BaseTest.class)
 public class ProprietorListApiTest {
     authTokenTest authService = new authTokenTest();
     String accessToken = authService.getAccessToken();
+
+    private String getFirstProprietorId() {
+        Response response = given()
+                .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
+                .get("http://172.20.207.16:9000/client-relations/tasks/proprietor")
+                .andReturn();
+
+        assertEquals(200, response.getStatusCode());
+        String id = response.jsonPath().getString("content[0].id");
+        assertNotNull(id, "Не удалось получить ID собственника");
+
+        return id;
+    }
     @Test
     @Description("Получение списка собственников с пагинацией")
     @DisplayName("Успешное получение списка собственников")
@@ -209,6 +223,8 @@ public class ProprietorListApiTest {
         // Проверка что используется страница по умолчанию (0)
         Integer number = getProprietorList.jsonPath().getInt("number");
         assertEquals(0, number);
+        //
+
     }
 
     @Test
@@ -243,7 +259,7 @@ public class ProprietorListApiTest {
     @DisplayName("Успешное получение собственника")
     public void getProprietor_Success() {
 
-        String validUuid = "0d020b30-d708-4714-a7d0-cd0521195a3f";
+        String validUuid = getFirstProprietorId();
 
         Response getProprietor = given()
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
@@ -261,7 +277,7 @@ public class ProprietorListApiTest {
     @Description("Получение собственника - неавторизованный доступ")
     @DisplayName("Ошибка авторизации при получении собственника")
     public void getProprietor_Unauthorized() {
-        String validUuid = "0d020b30-d708-4714-a7d0-cd0521195a3f";
+        String validUuid = getFirstProprietorId();
 
         Response getProprietor = given()
                 .headers("Content-Type", "application/json; charset=UTF-8")
@@ -310,7 +326,7 @@ public class ProprietorListApiTest {
     @DisplayName("Успешное получение собственника (path param)")
     public void getProprietor_WithPathParam() {
 
-        String validUuid = "0d020b30-d708-4714-a7d0-cd0521195a3f";
+        String validUuid = getFirstProprietorId();
 
         Response getProprietor = given()
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
@@ -334,7 +350,7 @@ public class ProprietorListApiTest {
     @DisplayName("Проверка заголовков ответа")
     public void getProprietor_ResponseHeaders() {
 
-        String validUuid = "0d020b30-d708-4714-a7d0-cd0521195a3f";
+        String validUuid = getFirstProprietorId();
 
         Response getProprietor = given()
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
@@ -355,7 +371,7 @@ public class ProprietorListApiTest {
     @DisplayName("Проверка формата UUID в ответе")
     public void getProprietor_UuidFormat() {
 
-        String validUuid = "0d020b30-d708-4714-a7d0-cd0521195a3f";
+        String validUuid = getFirstProprietorId();
 
         Response getProprietor = given()
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
@@ -365,6 +381,7 @@ public class ProprietorListApiTest {
         int statusCode = getProprietor.getStatusCode();
         assertEquals(200, statusCode);
 
+
         String responseUuid = getProprietor.jsonPath().getString("id");
 
         // Проверка что UUID соответствует формату
@@ -372,6 +389,7 @@ public class ProprietorListApiTest {
                 "UUID format is invalid");
 
         assertEquals(validUuid, responseUuid);
+
     }
     @Test
     @Description("Создание новой записи собственника с использованием DTO")
@@ -379,8 +397,8 @@ public class ProprietorListApiTest {
     public void saveAndDeleteProprietorDto_Success() {
 
 
-        String clientId = "5146211d-6bfb-4966-8ef8-3a1e69e72449";
-        String objectUk = "690396bc-2ff2-459c-b1be-b05adaf711b6";
+        String clientId = "56fe8853-9836-4586-9a09-3dfbd8d71d09";
+        String objectUk = "52045561-2361-495c-93d9-b9f17f50b833";
 
         String requestBody = String.format(
                 "{\"clientId\":\"%s\",\"objectUk\":\"%s\",\"typeContact\":\"Собственник\",\"typeOwnership\":\"совместная\"}",
@@ -423,7 +441,7 @@ public class ProprietorListApiTest {
                 .given()
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
                 .body(deleteBody)
-                .put("http://172.20.207.16/api/client-relations/tasks/proprietor/a67ae7c3-74d9-4c0c-91f9-0e79e88e07ec")
+                .put("http://172.20.207.16/api/client-relations/tasks/proprietor/710949be-af50-4569-994a-d62724027642")
                 .andReturn();
         int statusCodes = deleteProprietor.getStatusCode();
         assertEquals(200,statusCodes);

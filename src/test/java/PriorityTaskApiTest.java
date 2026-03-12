@@ -3,9 +3,10 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@ExtendWith(BaseTest.class)
 public class PriorityTaskApiTest {
     authTokenTest authService = new authTokenTest();
     String accessToken = authService.getAccessToken();

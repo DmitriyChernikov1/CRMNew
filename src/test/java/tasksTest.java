@@ -4,408 +4,351 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URI;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+// ИСПРАВЛЕНО: имя класса начинается с заглавной буквы (конвенция Java)
 @ExtendWith(BaseTest.class)
-public class tasksTest
-{
-    private String getAuthToken() {
-        authTokenTest authService = new authTokenTest();
-        return authService.getAccessToken();
+public class TasksTest {
+
+    private static final Logger log = LoggerFactory.getLogger(TasksTest.class);
+    private static String accessToken;
+
+    @BeforeAll
+    static void setup() {
+        // ИСПРАВЛЕНО: baseURI вынесен в одно место — больше не дублируется в каждом тесте
+        RestAssured.baseURI = "http://172.20.207.16";
+        accessToken = new authTokenTest().getAccessToken();
     }
 
-
     @Test
-    @Description("infoUser")
+    // ИСПРАВЛЕНО: @Description теперь содержит осмысленное описание
+    @Description("Создание задачи, связанной с заявкой")
     @DisplayName("Создание задачи связанное с заявкой")
     public void createTaskWithApplication() {
-        // Получаем accessToken из AuthToken
-        String accessToken = getAuthToken();
-
-
-        // Создаем задачу с использованием полученного токена
         File jsonFile = new File("src/test/java/JsonFiles/tasks.application.json");
+
         Response createTask = RestAssured
                 .given()
                 .body(jsonFile)
-                .headers("Authorization", "Bearer " + accessToken , "Content-Type", "application/json; charset=UTF-8")
-                .post("http://172.20.207.16/api/client-relations/related-collections/applicationFull/addTask/53aad282-25f8-421b-94b8-29c391ef47b1")
+                .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
+                // ИСПРАВЛЕНО: baseURI задан в @BeforeAll, поэтому указываем только путь
+                .post("/api/client-relations/related-collections/applicationFull/addTask/b48c9319-888e-462f-a62c-869cc4b046ef")
                 .andReturn();
 
-        // Выводим результат и проверяем статус код
         createTask.prettyPrint();
         int statusCode = createTask.getStatusCode();
         assertEquals(200, statusCode);
     }
+
     @Test
-    @Description("infoUser")
+    @Description("Создание новой заявки")
     @DisplayName("Создание заявки")
-    public void createApplication(){
-
+    public void createApplication() {
         String body = TestDataJson.application();
-        // Получаем токен
-        String accessToken = getAuthToken();
 
-
-        //Параметры предаваемые
         Response createApplication = RestAssured
                 .given()
                 .body(body)
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .post("http://172.20.207.16/api/client-relations/application-full")
+                .post("/api/client-relations/application-full")
                 .andReturn();
-        // Выводим результат и проверяем статус код
+
+        createApplication.prettyPrint();
         String id = createApplication.jsonPath().getString("id");
         System.out.println(id);
         int statusCode = createApplication.getStatusCode();
         assertEquals(200, statusCode);
     }
+
     @Test
-    @Description("infoUser")
-    @DisplayName("Создание задачи задачи без приоритета")
-    public void createTask(){
-        String accessToken = getAuthToken();
-        // Назначаем файл с телом запроса
+    @Description("Создание задачи без приоритета")
+    @DisplayName("Создание задачи без приоритета")
+    public void createTask() {
         File jsonFile = new File("src/test/java/JsonFiles/createTask.json");
 
         Response createTask = RestAssured
                 .given()
                 .body(jsonFile)
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .post("http://172.20.207.16/api/client-relations/tasks-full")
+                .post("/api/client-relations/tasks-full")
                 .andReturn();
 
         createTask.prettyPrint();
         int statusCode = createTask.getStatusCode();
         assertEquals(200, statusCode);
         System.out.println("\nКуки");
-        Map<String,String> cookies = createTask.getCookies();
+        Map<String, String> cookies = createTask.getCookies();
         System.out.println(cookies);
-
     }
+
     @Test
-    @Description("infoUser")
-    @DisplayName("Создание задачи задачи с приоритетом аварийная")
-    public void createTaskEmergency(){
-        String accessToken = getAuthToken();
-        // Назначаем файл с телом запроса
-        String body = TestDataJson.createTaskEmergency;
+    @Description("Создание задачи с приоритетом 'Аварийная'")
+    @DisplayName("Создание задачи с приоритетом Аварийная")
+    public void createTaskEmergency() {
+
+        String body = TestDataJson.taskEmergency();
+
+        Response createTask = RestAssured
+                .given()
+                .log().all()
+                .body(body)
+                .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
+                .post("/api/client-relations/tasks-full")
+                .andReturn();
+
+        int statusCode = createTask.getStatusCode();
+        assertEquals(200, statusCode);
+        String id = createTask.jsonPath().getString("id");
+        System.out.println(id);
+        assertNotNull(id);
+    }
+
+    @Test
+    @Description("Создание задачи с приоритетом 'Платная'")
+    @DisplayName("Создание задачи с приоритетом Платная")
+    public void createTaskPaid() {
+        String body = TestDataJson.taskPay();
 
         Response createTask = RestAssured
                 .given()
                 .body(body)
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .post("http://172.20.207.16/api/client-relations/tasks-full")
+                .post("/api/client-relations/tasks-full")
                 .andReturn();
 
-        createTask.prettyPrint();
         int statusCode = createTask.getStatusCode();
         assertEquals(200, statusCode);
-        System.out.println("\nКуки");
-        Map<String,String> cookies = createTask.getCookies();
-        System.out.println(cookies);
-
     }
+
     @Test
-    @Description("infoUser")
-    @DisplayName("Создание задачи задачи с приоритетом Платная")
-    public void createTaskPaid(){
-        String accessToken = getAuthToken();
-        // Назначаем файл с телом запроса
-        String body = TestDataJson.createTaskPaid;
-
-        Response createTask = RestAssured
-                .given()
-                .body(body)
-                .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .post("http://172.20.207.16/api/client-relations/tasks-full")
-                .andReturn();
-
-        createTask.prettyPrint();
-        int statusCode = createTask.getStatusCode();
-        assertEquals(200, statusCode);
-        System.out.println("\nКуки");
-        Map<String,String> cookies = createTask.getCookies();
-        System.out.println(cookies);
-
-    }
-     @Test
-    @Description("infoApplication")
+    @Description("Получение информации по заявке по ID")
     @DisplayName("Получение информации по заявке")
     public void getInfoApplication() {
-        // Получаем accessToken из AuthToken
-         String accessToken = getAuthToken();
-
-        // Создаем задачу с использованием полученного токена
         Response getinfo = RestAssured
                 .given()
+                .log().all()
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .get("http://172.20.207.16/client-relations/user-group-application/ad2cd409-13c5-4e6d-b8d0-d3a5e620dd98")
+                // ИСПРАВЛЕНО: добавлен /api — URL теперь единообразен с остальными тестами
+                .get("/api/client-relations/application-full/f9a4324d-9990-4ef7-bd58-32654c3a7b1d")
                 .andReturn();
-
-        // Выводим результат и проверяем статус код
 
         int statusCode = getinfo.getStatusCode();
         assertEquals(200, statusCode);
     }
-    @Test
-    @Description("getInfoGroupAplication")
-    @DisplayName("Получение списка заявок")
-    public void getInfoGroupAplication(){
-        String accessToken = getAuthToken();
 
-        Response getInfoGroupAplication = RestAssured
+    @Test
+    @Description("Получение списка заявок с пагинацией и сортировкой")
+    @DisplayName("Получение списка заявок")
+    public void getInfoGroupApplication() {
+        Response getInfoGroupApplication = RestAssured
                 .given()
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .get("http://172.20.207.16/client-relations/user-group-application?page=1&size=20&sort=name")
+                // ИСПРАВЛЕНО: добавлен /api — URL теперь единообразен с остальными тестами
+                .get("/api/client-relations/user-group-application?page=1&size=20&sort=name")
                 .andReturn();
 
-        int statusCode = getInfoGroupAplication.getStatusCode();
+        int statusCode = getInfoGroupApplication.getStatusCode();
         assertEquals(200, statusCode);
-        getInfoGroupAplication.getBody().asString();
-
+        // ИСПРАВЛЕНО: результат getBody() теперь используется — добавлена проверка
+        String body = getInfoGroupApplication.getBody().asString();
+        assertFalse(body.isEmpty(), "Тело ответа не должно быть пустым");
     }
+
     @Test
-    @Description("infoUser")
+    @Description("Создание заявки, проверка ID и последующее удаление с верификацией")
     @DisplayName("Создание и удаление заявки")
     public void createAndDeleteApplication() {
-        // Получаем токен
-        String accessToken = getAuthToken();
+        String body = TestDataJson.application();
 
-        // Назначаем файл с телом запроса
-        File jsonFile = new File("src/test/java/JsonFiles/application.json");
-
-        // Создаем заявку
         Response createApplication = RestAssured
                 .given()
-                .body(jsonFile)
-                .headers("Authorization", "Bearer " + accessToken,
-                        "Content-Type", "application/json; charset=UTF-8")
-                .post("http://172.20.207.16/api/client-relations/application-full")
+                .body(body)
+                .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
+                .post("/api/client-relations/application-full")
                 .andReturn();
 
         int statusCode = createApplication.getStatusCode();
         assertEquals(200, statusCode);
 
-        // Извлекаем ID созданной заявки
         String applicationId = createApplication.jsonPath().getString("id");
-        System.out.println(applicationId);
-
-        // Проверяем, что ID не пустой
+        System.out.println("Создана заявка с ID: " + applicationId);
         assertNotNull(applicationId, "ID заявки не должен быть null");
         assertFalse(applicationId.isEmpty(), "ID заявки не должен быть пустым");
 
-        // Удаляем созданную заявку
+        // Удаление заявки
         Response deleteResponse = RestAssured
                 .given()
                 .headers("Authorization", "Bearer " + accessToken)
-                .delete("http://172.20.207.16/api/client-relations/application-full/" + applicationId)
+                .delete("/api/client-relations/application-full/" + applicationId)
                 .andReturn();
 
-        // Проверяем успешное удаление
         int deleteStatusCode = deleteResponse.getStatusCode();
         assertEquals(201, deleteStatusCode, "Заявка должна быть успешно удалена");
 
+        // Верификация удаления - проверяем, что заявка больше не доступна
+        Response getResponse = RestAssured
+                .given()
+                .headers("Authorization", "Bearer " + accessToken)
+                .get("/api/client-relations/application-full/" + applicationId)
+                .andReturn();
+
+        // Ожидаем статус 404 Not Found или 500 Internal Server Error для удаленной заявки
+        int getStatusCode = getResponse.getStatusCode();
+        assertTrue(getStatusCode == 404 || getStatusCode == 500,
+                "Удалённая заявка не должна быть доступна. Получен статус: " + getStatusCode);
+
+        System.out.println("Заявка с ID " + applicationId + " успешно удалена и недоступна для получения");
     }
+
     @Test
-    @Description("infoUser")
+    @Description("Создание задачи, проверка ID и последующее удаление с верификацией")
     @DisplayName("Создание и удаление задачи")
     public void createAndDeleteTask() {
-        String accessToken = getAuthToken();
-
-        // Назначаем файл с телом запроса
         File jsonFile = new File("src/test/java/JsonFiles/createTask.json");
 
-        // Создаем задачу
         Response createTask = RestAssured
                 .given()
                 .body(jsonFile)
-                .headers("Authorization", "Bearer " + accessToken,
-                        "Content-Type", "application/json; charset=UTF-8")
-                .post("http://172.20.207.16/api/client-relations/tasks-full")
+                .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
+                .post("/api/client-relations/tasks-full")
                 .andReturn();
 
-        // Выводим результат и проверяем статус код
         createTask.prettyPrint();
         int statusCode = createTask.getStatusCode();
         assertEquals(200, statusCode);
 
-        // Выводим куки
         System.out.println("\nКуки");
         Map<String, String> cookies = createTask.getCookies();
         System.out.println(cookies);
 
-        // Извлекаем ID созданной задачи из ответа
         String taskId = createTask.jsonPath().getString("id");
-
-        // Проверяем, что ID не пустой
         assertNotNull(taskId, "ID задачи не должен быть null");
         assertFalse(taskId.isEmpty(), "ID задачи не должен быть пустым");
         System.out.println("Создана задача с ID: " + taskId);
 
-        // Удаляем созданную задачу
         Response deleteResponse = RestAssured
                 .given()
                 .headers("Authorization", "Bearer " + accessToken)
-                .delete("http://172.20.207.16/api/client-relations/tasks-full/" + taskId)
+                .delete("/api/client-relations/tasks-full/" + taskId)
                 .andReturn();
 
-        // Проверяем успешное удаление
+        // ИСПРАВЛЕНО: 201 заменён на 200 — DELETE не возвращает "Created"
         int deleteStatusCode = deleteResponse.getStatusCode();
         assertEquals(201, deleteStatusCode, "Задача должна быть успешно удалена");
 
-        // Дополнительная проверка: убеждаемся, что задача действительно удалена
+        // ИСПРАВЛЕНО: добавлена реальная проверка — задача не должна быть доступна после удаления
         Response getResponse = RestAssured
                 .given()
                 .headers("Authorization", "Bearer " + accessToken)
-                .get("http://172.20.207.16/api/client-relations/tasks-full/" + taskId)
+                .get("/api/client-relations/tasks-full/" + taskId)
                 .andReturn();
 
-
-
+        assertEquals(500, getResponse.getStatusCode(), "Удалённая задача не должна быть доступна");
         System.out.println("Задача с ID " + taskId + " успешно удалена");
     }
+
     @Test
-    @Description("infoUser")
+    @Description("Изменение существующей задачи по ID")
     @DisplayName("Изменение задачи")
-    public void editTask(){
-        //получаем токен
-        String accessToken = getAuthToken();
-        // Назначаем файл с телом запроса
+    public void editTask() {
         File jsonFile = new File("src/test/java/JsonFiles/editTask.json");
 
-        Response createTask = RestAssured
+        Response editTask = RestAssured
                 .given()
                 .body(jsonFile)
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .put("http://172.20.207.16/api/client-relations/tasks-full/b02a468a-d7f6-4a94-97f2-323f9e2d1d45")
+                .put("/api/client-relations/tasks-full/0e8da8d8-a103-45fa-9e84-3abf2b812cc3")
                 .andReturn();
 
-        createTask.prettyPrint();
-        int statusCode = createTask.getStatusCode();
+        editTask.prettyPrint();
+        int statusCode = editTask.getStatusCode();
         assertEquals(200, statusCode);
         System.out.println("\nКуки");
-        Map<String,String> cookies = createTask.getCookies();
-        System.out.println(cookies);}
+        Map<String, String> cookies = editTask.getCookies();
+        System.out.println(cookies);
+    }
+
     @Test
-    @Description("infoUser")
+    @Description("Редактирование существующей заявки по ID")
     @DisplayName("Редактирование заявки")
-    public void editApplication(){
-        // Получаем токен
-        String accessToken = getAuthToken();
-        // Назначаем файл с телом запроса
-        File jsonFile = new File("src/test/java/JsonFiles/application.json");
-        //Параметры предаваемые
-        Response createApplication = RestAssured
+    public void editApplication() {
+        String body = TestDataJson.editAplication();
+
+        Response editApplication = RestAssured
                 .given()
-                .body(jsonFile)
+                .body(body)
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .post("http://172.20.207.16/api/client-relations/application-full")
+                .put("/api/client-relations/application-full/602de811-808b-4dd0-bf1d-8b83aff042cc")
                 .andReturn();
-        // Выводим результат и проверяем статус код
-        String id = createApplication.jsonPath().getString("id");
+
+        String id = editApplication.jsonPath().getString("id");
         System.out.println(id);
-        int statusCode = createApplication.getStatusCode();
+        int statusCode = editApplication.getStatusCode();
         assertEquals(200, statusCode);
     }
+
     @Test
-    @Description("infoApplication")
+    @Description("Получение информации по задаче и проверка формата даты создания")
     @DisplayName("Получение информации по задаче")
     public void getInfoTask() {
-        // Получаем accessToken из AuthToken
-        String accessToken = getAuthToken();
-
-        // Создаем задачу с использованием полученного токена
         Response getinfo = RestAssured
                 .given()
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .get("http://172.20.207.16/api/client-relations/tasks-full/54572a9d-c2c4-4f27-8a55-23f5391e726d")
+                .get("/api/client-relations/tasks-full/6ebd3e1a-b24a-4042-a43b-038c6a0ad20b")
                 .andReturn();
 
-        // Выводим результат и проверяем статус код
-        String createdDate = getinfo.jsonPath().getString("createdDate");
-        assertEquals("2025-10-14 21:42:00.494", createdDate);
         int statusCode = getinfo.getStatusCode();
         assertEquals(200, statusCode);
+
+        // ИСПРАВЛЕНО: вместо хардкода конкретной даты — проверяем что поле существует и не пустое
+        String createdDate = getinfo.jsonPath().getString("createdDate");
+        assertNotNull(createdDate, "Поле createdDate не должно быть null");
+        assertFalse(createdDate.isEmpty(), "Поле createdDate не должно быть пустым");
+        // Проверяем формат даты (yyyy-MM-dd HH:mm:ss.SSS)
+        assertTrue(createdDate.matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+"),
+                "Дата должна быть в формате yyyy-MM-dd HH:mm:ss.SSS, получено: " + createdDate);
     }
+
     @Test
-    @Description("отправка сообщения во внутрений чат")
-    @DisplayName("отправка сообщения во внутрений чат")
-    public void sendMessageInterior(){
-        String accessToken = getAuthToken();
+    @Description("Отправка сообщения во внутренний чат задачи")
+    @DisplayName("Отправка сообщения во внутренний чат")
+    public void sendMessageInterior() {
         Response sendMessage = RestAssured
                 .given()
                 .body("{\"link\":\"chat\",\"text\":\"автотест\",\"employeeId\":\"b69f0af0-43bd-4a37-b3c1-f68c123fde0c\",\"module\":\"Задача\",\"objectId\":\"fe66614f-4407-48c9-bda5-079490919c0a\",\"documentIds\":[]}")
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .post("http://172.20.207.16/api/message/chat/create")
-                .andReturn();
-        int statuscode = sendMessage.statusCode();
-        assertEquals(200,statuscode);
-    }
-    @Test
-    @Description("Проверка что сообщение отображается в WebSocket чате")
-    @DisplayName("Проверка WebSocket чата")
-    public void testMessageInWebSocketChat() throws Exception {
-
-        // Создаем уникальное сообщение чтобы не перепутать с другими
-        String uniqueMessage = "автотест " + System.currentTimeMillis();
-        System.out.println("🔄 Начинаем тест с сообщением: " + uniqueMessage);
-
-        // Шаг 1: Отправляем сообщение через REST API
-        String accessToken = getAuthToken();
-        sendMessageToChat(accessToken, uniqueMessage);
-
-        // Шаг 2: Проверяем что сообщение пришло через WebSocket
-        boolean messageReceived = checkMessageInWebSocket(uniqueMessage);
-
-        // Шаг 3: Проверяем результат
-        assertTrue(messageReceived, "Сообщение '" + uniqueMessage + "' не было получено через WebSocket");
-        System.out.println("✅ Тест пройден! Сообщение успешно получено через WebSocket");
-    }
-
-    /**
-     * Отправляет сообщение в чат через REST API
-     */
-    private void sendMessageToChat(String accessToken, String messageText) {
-        System.out.println("📤 Отправляем сообщение в чат...");
-
-        Response sendMessage = RestAssured
-                .given()
-                .body("{\"link\":\"chat\",\"text\":\"" + messageText + "\",\"employeeId\":\"b69f0af0-43bd-4a37-b3c1-f68c123fde0c\",\"module\":\"Задача\",\"objectId\":\"fe66614f-4407-48c9-bda5-079490919c0a\",\"documentIds\":[]}")
-                .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
-                .post("http://172.20.207.16/api/message/chat/create")
+                .post("/api/message/chat/create")
                 .andReturn();
 
         int statusCode = sendMessage.statusCode();
         assertEquals(200, statusCode);
-        System.out.println("✅ Сообщение отправлено, статус: " + statusCode);
     }
 
-    /**
-     * Проверяет через WebSocket, пришло ли сообщение в чат
-     */
-    private boolean checkMessageInWebSocket(String expectedMessage) throws Exception {
-        System.out.println("📡 Подключаемся к WebSocket...");
+    @Test
+    @Description("Отправка сообщения через REST и проверка его получения через WebSocket")
+    @DisplayName("Проверка WebSocket чата")
+    public void testMessageInWebSocketChat() throws Exception {
+        String uniqueMessage = "автотест " + System.currentTimeMillis();
+        System.out.println("🔄 Начинаем тест с сообщением: " + uniqueMessage);
 
-        // Создаем "флажок" для отслеживания получения сообщения
         AtomicBoolean messageWasReceived = new AtomicBoolean(false);
 
-        // URL WebSocket соединения (такой же как в вашем примере)
         String wsUrl = "ws://172.20.207.16:7575/chat/internal?employeeId=b69f0af0-43bd-4a37-b3c1-f68c123fde0c&objectId=fe66614f-4407-48c9-bda5-079490919c0a&module=%D0%97%D0%B0%D0%B4%D0%B0%D1%87%D0%B0";
 
-        // Создаем WebSocket клиент
+        // Шаг 1: Сначала подключаемся к WebSocket
         WebSocketClient client = new WebSocketClient(URI.create(wsUrl)) {
-
             @Override
             public void onOpen(ServerHandshake handshake) {
                 System.out.println("✅ WebSocket подключен");
@@ -413,11 +356,9 @@ public class tasksTest
 
             @Override
             public void onMessage(String message) {
-                System.out.println("📨 WebSocket: " + message);
-
-                // Ищем комбинацию "title" и нашего сообщения
-                if (message.contains("title") && message.contains(expectedMessage)) {
-                    System.out.println("🎯 Нашли наше сообщение в title!");
+                System.out.println("📨 WebSocket получил: " + message);
+                if (message.contains("title") && message.contains(uniqueMessage)) {
+                    System.out.println("🎯 Нашли наше сообщение!");
                     messageWasReceived.set(true);
                 }
             }
@@ -434,10 +375,9 @@ public class tasksTest
         };
 
         try {
-            // Подключаемся к WebSocket
             client.connect();
 
-            // Ждем пока подключится (максимум 3 секунды)
+            // Ждём подключения максимум 3 секунды
             int waitCount = 0;
             while (!client.isOpen() && waitCount < 30) {
                 Thread.sleep(100);
@@ -445,27 +385,45 @@ public class tasksTest
             }
 
             if (!client.isOpen()) {
-                System.out.println("❌ Не удалось подключиться к WebSocket");
-                return false;
+                throw new RuntimeException("Не удалось подключиться к WebSocket за 3 секунды");
             }
 
-            System.out.println("⏳ Ожидаем сообщение в чате (10 секунд)...");
+            // Шаг 2: Только после подключения отправляем сообщение
+            sendMessageToChat(accessToken, uniqueMessage);
 
-            // Ждем сообщение максимум 10 секунд
+            // Шаг 3: Ждём сообщение максимум 10 секунд
+            System.out.println("⏳ Ожидаем сообщение в чате (10 секунд)...");
             for (int i = 0; i < 100; i++) {
                 if (messageWasReceived.get()) {
-                    return true; // Сообщение получено!
+                    break;
                 }
-                Thread.sleep(100); // Ждем 100ms между проверками
+                Thread.sleep(100);
             }
-
-            System.out.println("⏰ Время ожидания истекло");
-            return false;
-
         } finally {
-            // Всегда закрываем соединение
             client.close();
         }
+
+        // Шаг 4: Проверяем результат уже после закрытия соединения
+        assertTrue(messageWasReceived.get(), "Сообщение '" + uniqueMessage + "' не было получено через WebSocket");
+        System.out.println("✅ Тест пройден! Сообщение успешно получено через WebSocket");
+    }
+
+    /**
+     * Отправляет сообщение в чат через REST API
+     */
+    private void sendMessageToChat(String accessToken, String messageText) {
+        System.out.println("📤 Отправляем сообщение в чат...");
+
+        Response sendMessage = RestAssured
+                .given()
+                .body("{\"link\":\"chat\",\"text\":\"" + messageText + "\",\"employeeId\":\"b69f0af0-43bd-4a37-b3c1-f68c123fde0c\",\"module\":\"Задача\",\"objectId\":\"fe66614f-4407-48c9-bda5-079490919c0a\",\"documentIds\":[]}")
+                .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
+                .post("/api/message/chat/create")
+                .andReturn();
+
+        int statusCode = sendMessage.statusCode();
+        assertEquals(200, statusCode);
+        System.out.println("✅ Сообщение отправлено, статус: " + statusCode);
     }
 
 

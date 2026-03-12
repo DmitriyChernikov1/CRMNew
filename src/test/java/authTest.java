@@ -1,181 +1,159 @@
 import io.qameta.allure.Description;
 import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import io.restassured.http.Headers;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(BaseTest.class)
 public class authTest {
 
+    private static authTokenTest authService;
+    private static String accessToken;
 
+    // Сообщения вынесены в константы — не дублируются в коде
+    private static final String WRONG_CREDENTIALS_MESSAGE = "Логин или пароль введены неверно";
+    private static final String BLOCKED_MESSAGE =
+            "Учетная запись пользователя заблокирована и не может быть использована для входа. " +
+                    "Обратитесь к администратору <a class=\"email\" href=\"mailto:helpdesk@sbercity.ru\">" +
+                    "helpdesk@sbercity.ru</a> для формирования нового пароля.";
 
-    String str = "Fjt4wNG3KTP6oZ*%#}UIg#i?";
-    private String[] readCredentialsFromFile(String filePath) {
-        try {
-            String fileContent = new String(Files.readAllBytes(Paths.get(filePath)));
-
-            String login = null;
-            String password = null;
-
-            String[] lines = fileContent.split("\n");
-            for (String line : lines) {
-                if (line.startsWith("login=")) {
-                    login = line.substring(6).trim();
-                } else if (line.startsWith("password=")) {
-                    password = line.substring(9).trim();
-                }
-            }
-
-            if (login == null || password == null) {
-                throw new RuntimeException("Не найдены login или password в файле");
-            }
-
-            return new String[]{login, password};
-
-        } catch (IOException e) {
-            throw new RuntimeException("Ошибка чтения файла: " + filePath, e);
-        }
+    @BeforeAll
+    static void setUp() {
+        // Токен
+        authService = new authTokenTest();
+        RestAssured.baseURI = authTokenTest.BASE_URL;
+        accessToken = authService.getAccessToken();
     }
+
+
     @Test
     @Description("Авторизация")
     @DisplayName("Вход по валидным данным")
-    public void authorization(){
-        String[] credentials = readCredentialsFromFile("src/test/java/txtFiles/credentials.txt");
-        Map<String, String> auth = new HashMap<>();
-        auth.put("login", credentials[0]);
-        auth.put("password", credentials[1]);
-        Response responseToken = RestAssured
-                .given()
-                .header("Content-Type", "application/json; charset=UTF-8")
-                .body(auth)
-                .post("http://172.20.207.16:8083/users/auth/login")
-                .andReturn();
-        int statuscode =responseToken.getStatusCode();
-        responseToken.prettyPrint();
-        String resp = responseToken.jsonPath().getString("message");
-        System.out.println(resp);
+    public void authorization() {
+        // Данные берём из файла
+        String[] credentials = authService.readCredentialsFromFile("src/test/java/txtFiles/credentials.txt");
 
-        assertEquals(200, statuscode);
+        Map<String, String> authBody = new HashMap<>();
+        authBody.put("login", credentials[0]);
+        authBody.put("password", credentials[1]);
 
-
-
-
-
-        Headers responseHeaders = responseToken.getHeaders();
-        System.out.println(responseHeaders);
-
+        authService.baseRequest()
+                .body(authBody)
+                .post("/users/auth/login")
+                .then()
+                .statusCode(200);
     }
-    @Test
-    @Description("Авторизация")
-    @DisplayName("Вход под c неверным паролем")
-    public void wrongPassword(){
-        Map<String, String> auth = new HashMap<>();
-        auth.put("login", "DChernikov@sbercity.ru");
-        auth.put("password", "1rpJcOI3gVm1MRyLn");
-        Response responseToken = RestAssured
-                .given()
-                .header("Content-Type", "application/json; charset=UTF-8")
-                .body(auth)
-                .post("http://172.20.207.16:8083/users/auth/login")
-                .andReturn();
-        int statuscode =responseToken.getStatusCode();
-        JsonPath jsonPath = responseToken.jsonPath();
-        assertEquals("Incorrect login or password", jsonPath.getString("message"));
 
-        assertEquals(401, statuscode);
-
-
-    }
-    @Test
-    @Description("Авторизация")
-    @DisplayName("Вход под c неверным логином")
-    public void wrongLogin(){
-        Map<String, String> auth = new HashMap<>();
-        auth.put("login", "1DChernikov@sbercity.ru");
-        auth.put("password", "G$h8pY}%ci~ZD%H1");
-        Response responseToken = RestAssured
-                .given()
-                .header("Content-Type", "application/json; charset=UTF-8")
-                .body(auth)
-                .post("http://172.20.207.16:8083/users/auth/login")
-                .andReturn();
-        int statusCode = responseToken.getStatusCode();
-        String errorMessage = responseToken.jsonPath().getString("message");
-
-        assertEquals(401, statusCode);
-        assertEquals("Incorrect login or password", errorMessage);
-    }
-    @Test
-    @Description("Авторизация")
-    @DisplayName("Вход с просроченным паролем")
-    public void expiredPassword(){
-        Map<String, String> auth = new HashMap<>();
-        auth.put("login", "1dimon.ag6@gmail.com");
-        auth.put("password", "string");
-        Response responseAuth = RestAssured
-                .given()
-                .header("Content-Type", "application/json; charset=UTF-8")
-                .header("accept", "application/json")
-                .header("Accept-Language" , "ru-Ru")
-                .body(auth)
-                .post("http://172.20.207.16:8083/users/auth/login")
-                .andReturn();
-        int statuscode =responseAuth.getStatusCode();
-        String message = responseAuth.jsonPath().getString("message");
-        String test = "Учетная запись пользователя 1dimon.ag6@gmail.com удалена и не может быть использована для входа. Обратитесь к администратору.";
-
-assertEquals(test, message);
-        assertEquals(401, statuscode);
-        System.out.println(statuscode);
-
-    }
-    @Test
-    @Description("Авторизация")
-    @DisplayName("Превышен лимит ошибок")
-    public void tooMuchAttempts(){
-        Map<String, String> auth = new HashMap<>();
-        auth.put("login", "DCh222ernikov@sbercity.ru");
-        auth.put("password", "string");
-        Response responseAuth = RestAssured
-                .given()
-                .header("Content-Type", "application/json; charset=UTF-8")
-                .header("accept", "application/json")
-                .body(auth)
-                .post("http://172.20.207.16:8083/users/auth/login")
-                .andReturn();
-        int statuscode =responseAuth.getStatusCode();
-        String message = responseAuth.jsonPath().getString("message");
-        assertEquals("Account has been blocked and cannot be used to sign in. Contact the administrator. Reason: Пользователь ввел 10 раз неверный пароль", message);
-        assertEquals(401, statuscode);
-
-    }
     @Test
     @Description("Выход из системы")
     @DisplayName("Успешный выход из системы")
     public void successfulLogout() {
-        authTokenTest authService = new authTokenTest();
-        String accessToken = authService.getAccessToken();
-        Response logout = RestAssured
-                .given()
-                .header("Content-Type", "application/json; charset=UTF-8")
-                .header("accept", "application/json")
-                .header("Accept-Language", "ru-RU")
+        String[] credentials = authService.readCredentialsFromFile("src/test/java/txtFiles/credentials.txt");
+
+        Map<String, String> authBody = new HashMap<>();
+        authBody.put("login", credentials[0]);
+        authBody.put("password", credentials[1]);
+
+        authService.baseRequest()
+                .body(authBody)
+                .post("/users/auth/login")
+                .then()
+                .statusCode(200);
+
+        authService.baseRequest()
                 .header("Authorization", "Bearer " + accessToken)
-                .get("http://172.20.207.16:8083/users/auth/logout")
-                .andReturn();
-        int statuscode = logout.getStatusCode();
-        assertEquals(statuscode, 200);
+                .get("/users/auth/logout")
+                .then()
+                .log().all()
+                .statusCode(200); // исправлен порядок: было assertEquals(statuscode, 200)
     }
 
+
+
+    @Test
+    @Description("Авторизация")
+    @DisplayName("Вход с неверным паролем")
+    public void wrongPassword() {
+        Map<String, String> authBody = new HashMap<>();
+        authBody.put("login", "DChernikov@sbercity.ru");
+        authBody.put("password", "неверный_пароль");
+
+        Response response = authService.baseRequest()
+                .body(authBody)
+                .post("/users/auth/login")
+                .andReturn();
+
+        assertEquals(401, response.getStatusCode());
+        assertEquals(WRONG_CREDENTIALS_MESSAGE, response.jsonPath().getString("message"));
+    }
+
+    @Test
+    @Description("Авторизация")
+    @DisplayName("Вход с неверным логином")
+    public void wrongLogin() {
+        Map<String, String> authBody = new HashMap<>();
+        authBody.put("login", "несуществующий@sbercity.ru");
+        authBody.put("password", "любой_пароль");
+
+        Response response = authService.baseRequest()
+                .body(authBody)
+                .post("/users/auth/login")
+                .andReturn();
+
+        assertEquals(401, response.getStatusCode());
+        assertEquals(WRONG_CREDENTIALS_MESSAGE, response.jsonPath().getString("message"));
+    }
+
+    @Test
+    @Description("Авторизация")
+    @DisplayName("Превышен лимит ошибок — аккаунт заблокирован")
+    public void tooMuchAttempts() {
+        Map<String, String> authBody = new HashMap<>();
+        authBody.put("login", "DCh222ernikov@sbercity.ru");
+        authBody.put("password", "string");
+
+        Response response = authService.baseRequest()
+                .body(authBody)
+                .post("/users/auth/login")
+                .andReturn();
+
+        assertEquals(401, response.getStatusCode());
+        assertEquals(BLOCKED_MESSAGE, response.jsonPath().getString("message"));
+    }
+
+    @Test
+    @Description("Авторизация")
+    @DisplayName("Вход с просроченным паролем — валидный пароль возвращает 200")
+    public void loginWithExpiredPassword_validPass_returns200() {
+        // Разбили if/else на два теста — каждый тест проверяет одну вещь
+        Map<String, String> authBody = new HashMap<>();
+        authBody.put("login", "rail.test@mail.ru");
+        authBody.put("password", "Fjt4wNG3KTP6oZ*%#}UIg#i?");
+
+        authService.baseRequest()
+                .body(authBody)
+                .post("/users/auth/login")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    @Description("Авторизация")
+    @DisplayName("Вход с просроченным паролем — пустой пароль возвращает 401")
+    public void loginWithExpiredPassword_emptyPass_returns401() {
+        Map<String, String> authBody = new HashMap<>();
+        authBody.put("login", "rail.test@mail.ru");
+        authBody.put("password", "");
+
+        authService.baseRequest()
+                .body(authBody)
+                .post("/users/auth/login")
+                .then()
+                .statusCode(401);
+    }
 }

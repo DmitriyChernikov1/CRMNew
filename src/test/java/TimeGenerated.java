@@ -134,4 +134,12 @@ public class TimeGenerated {
                 .withNano(0)
                 .format(FORMATTER);
     }
+    public static String localTime() {
+        // Получаем текущую дату и время
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        // Форматируем дату и время в нужный формат
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        return currentDateTime.format(formatter);
+    }
 }

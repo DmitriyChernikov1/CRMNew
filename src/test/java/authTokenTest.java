@@ -1,44 +1,64 @@
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import java.util.HashMap;
-import java.util.Map;
+import io.restassured.specification.RequestSpecification;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+/**
+ * Вспомогательный класс для авторизации.
+ * Предоставляет токен и базовый запрос с общими заголовками.
+ */
 public class authTokenTest {
 
-    // Метод для получения accessToken
+    // URL в одном месте — если изменится, меняем только здесь
+    public static final String BASE_URL = "http://172.20.207.16:8083";
+    private static final String CREDENTIALS_PATH = "src/test/java/txtFiles/credentials.txt";
+
+
+     // Получаем accessToken через логин.
+
     public String getAccessToken() {
-        // Чтение учетных данных из файла
-        String[] credentials = readCredentialsFromFile("src/test/java/txtFiles/credentials.txt");
-        if (credentials == null || credentials.length != 2) {
-            throw new RuntimeException("Не удалось прочитать логин и пароль из файла");
-        }
+        String[] credentials = readCredentialsFromFile(CREDENTIALS_PATH);
 
         Map<String, String> auth = new HashMap<>();
         auth.put("login", credentials[0]);
         auth.put("password", credentials[1]);
 
-        Response responseToken = RestAssured
+        return RestAssured
                 .given()
                 .header("Content-Type", "application/json; charset=UTF-8")
+                .header("accept", "application/json")
+                .header("Accept-Language", "ru,ru-RU;q=0.9,en-US;q=0.8,en;q=0.7")
                 .body(auth)
-                .post("http://172.20.207.16:8083/users/auth/login")
-                .andReturn();
-
-        // Проверка статуса ответа
-        int statusCode = responseToken.getStatusCode();
-        if (statusCode != 200) {
-            throw new RuntimeException("Ошибка при получении токена. Код статуса: " + statusCode);
-        }
-
-        // Возвращаем accessToken
-        return responseToken.jsonPath().getString("accessToken");
+                .post(BASE_URL + "/users/auth/login")
+                .then()
+                .statusCode(200)        // упадёт сразу если логин не прошёл
+                .extract()
+                .jsonPath()
+                .getString("accessToken");
     }
 
-    // Метод для чтения учетных данных из файла
-    private String[] readCredentialsFromFile(String filePath) {
+
+     // Базовый запрос с общими заголовками.
+
+    public RequestSpecification baseRequest() {
+        return RestAssured
+                .given()
+                .baseUri(BASE_URL)
+                .header("Content-Type", "application/json; charset=UTF-8")
+                .header("accept", "application/json")
+                .header("Accept-Language", "ru-RU");
+    }
+
+    /**
+     * Читает логин и пароль из файла формата:
+     * login=user@mail.ru
+     * password=secret
+     */
+    public String[] readCredentialsFromFile(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             String login = null;
@@ -52,12 +72,14 @@ public class authTokenTest {
                 }
             }
 
-            if (login != null && password != null) {
-                return new String[]{login, password};
+            if (login == null || password == null) {
+                throw new RuntimeException("Не найдены login или password в файле: " + filePath);
             }
+
+            return new String[]{login, password};
+
         } catch (IOException e) {
-            System.err.println("Ошибка при чтении файла: " + e.getMessage());
+            throw new RuntimeException("Ошибка чтения файла: " + filePath, e);
         }
-        return null;
     }
 }

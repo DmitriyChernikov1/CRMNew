@@ -20,7 +20,7 @@ public class administration {
                 .given()
                 .headers("Authorization", "Bearer " + accessToken, "Content-Type", "application/json; charset=UTF-8")
                 .body(body)
-                .post("http://172.20.207.16/api/users/user_employee/01bb66cc-6456-41ce-9fb7-ad38c25fea43")
+                .put("http://172.20.207.16/api/users/user_employee/c1934b45-4752-4c4d-8d52-86c749bfacba")
                 .andReturn();
 
         int statusCode = putUser.getStatusCode();
