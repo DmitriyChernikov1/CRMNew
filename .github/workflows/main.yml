@@ -27,7 +27,18 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
       - name: Run tests
-        run: mvn test
+        run: mvn test      
+      - name: Debug file structure after tests
+        if: always()
+        run: |
+          echo "=== Текущая директория ==="
+          pwd
+          echo "=== Содержимое корня проекта (первые 3 уровня) ==="
+          find . -maxdepth 3 -type d | head -20
+          echo "=== Поиск папки allure-results ==="
+          find . -name "allure-results" -type d
+          echo "=== Поиск любых файлов с именем allure ==="
+          find . -name "*allure*" 2>/dev/null | head -10
 
       - name: Upload Allure Results
         if: always()
