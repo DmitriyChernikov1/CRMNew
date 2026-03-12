@@ -29,17 +29,20 @@ jobs:
       - name: Run tests
         run: mvn test
 
-      - name: Debug file structure after tests
+      - name: Debug structure BEFORE upload
         if: always()
         run: |
-          echo "=== Текущая рабочая директория ==="
+          echo "=== Текущая директория ==="
           pwd
-          echo "=== Содержимое корня проекта (первые 2 уровня) ==="
+          echo "=== Полный список файлов в корне проекта ==="
           ls -la
-          echo "=== Поиск папки allure-results ==="
-          find . -name "allure-results" -type d
-          echo "=== Поиск любых файлов/папок с именем allure ==="
-          find . -name "*allure*" 2>/dev/null | head -10
+          echo "=== Проверка существования allure-results ==="
+          if [ -d "allure-results" ]; then
+            echo "ПАПКА allure-results СУЩЕСТВУЕТ"
+            ls -la allure-results/
+          else
+            echo "ПАПКА allure-results НЕ НАЙДЕНА"
+          fi
 
       - name: Upload Allure Results
         if: always()
@@ -47,3 +50,4 @@ jobs:
         with:
           name: allure-results
           path: ./allure-results
+          if-no-files-found: warn
